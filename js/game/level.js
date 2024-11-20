@@ -9,7 +9,7 @@ class Level extends Game
     {
         super(canvasId);
         
-        const player = new Player(10, 10,40, 50);
+        const player = new Player(10, this.canvas.height - 150,40, 50);
         
         this.camera.confiner = new Confiner(0,0,2000,this.canvas.height);
         this.camera.target = player;
@@ -27,7 +27,7 @@ class Level extends Game
         }
         
         const Collectibles = [
-            new Collectible(175,this.canvas.height-100),
+            new Collectible(375,this.canvas.height-100),
             new Collectible(475,this.canvas.height-100),
            
         ];
