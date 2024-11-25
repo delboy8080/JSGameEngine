@@ -48,7 +48,6 @@ class Collectible extends GameObject
         {
             this.hDirection *=-1;
         }
-        console.log(renderer.width);
         super.update(deltaTime);
     }
     

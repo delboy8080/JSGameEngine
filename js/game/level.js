@@ -3,6 +3,8 @@ import Confiner from '../engine/confiner.js';
 import Platform from './platform.js';
 import Player from './player.js';
 import Collectible from './collectible.js';
+import Checkpoint from './checkpoint.js';
+import Enemy from './enemy.js';
 class Level extends Game
 {
     constructor(canvasId)
@@ -36,6 +38,19 @@ class Level extends Game
         {
             this.addGameObject(coll);
         }
+        
+        const enemies = [
+            new Enemy(300, 100),
+            new Enemy(700, 100)
+            
+        ];
+        
+        for(let enemy of enemies)
+        {
+            this.addGameObject(enemy);
+        }
+        
+        this.addGameObject(new Checkpoint(450, this.canvas.height-100, 20,40, 'yellow'));
     }
 }
 export default Level

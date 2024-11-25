@@ -5,6 +5,8 @@ import Input from "../engine/input.js"
 import {Images} from '../engine/resources.js'
 import Platform from './platform.js'
 import Collectible from './collectible.js'
+import Checkpoint from './checkpoint.js'
+import Projectile from './projectile.js'
 import ParticleSystem from '../engine/particleSystem.js'
 class Player extends GameObject
 {
@@ -27,6 +29,10 @@ class Player extends GameObject
         this.jumpForce = 300;
         this.jumpTime = 1.0;
         this.jumpTimer = 0;
+        this.lives = 3;
+        this.inVulnreable =false;
+        
+        this.startPoint = {x: x, y:y};
 
     }
     
@@ -35,11 +41,13 @@ class Player extends GameObject
         
         const physics = this.getComponent(Physics);
         const input = this.getComponent(Input);
-        
+        const renderer = this.getComponent(Renderer);
         if(input.isKeyDown("ArrowRight"))
         {
+            
             physics.velocity.x = this.speed;
             this.direction = -1;
+            console.log("in");
         }
         else if(input.isKeyDown("ArrowLeft"))
         {
@@ -51,18 +59,48 @@ class Player extends GameObject
             physics.velocity.x = 0;
         }
         
+        if(input.isKeyDown("Space"))
+        {
+            let projectile = new Projectile(this.x + (renderer.width/2) , 
+            this.y + renderer.height/2, 20,20,Images.projectile1, "PlayerProjectile",
+            this.direction*-1);
+            this.game.addGameObject(projectile);
+            input.keys["Space"]=false;
+        }
+        if(input.isKeyDown("ArrowUp") && this.isOnPlatform)
+        {
+            this.startJump();
+        }
+       
+        if(this.isJumping)
+        {
+            this.updateJump(deltaTime);
+        }
         const platforms = this.game.gameObjects.filter((obj) => obj instanceof Platform);
         for(const platform of platforms)
         {
           
             if(physics.isColliding(platform.getComponent(Physics)))
             {
-                physics.acceleration.y = 0;
-                physics.velocity.y = 0;
-                this.y = platform.y - this.getComponent(Renderer).height;
-                this.isOnPlatform = true;
+                if (!this.isJumping) 
+                {
+                    physics.acceleration.y = 0;
+                    physics.velocity.y = 0;
+                    this.y = platform.y - this.getComponent(Renderer).height;
+                    this.isOnPlatform = true;
+                }
             }
             
+        }
+        const checkpoints = this.game.gameObjects.filter((obj) => obj instanceof Checkpoint);
+        for(const checkpoint of checkpoints)
+        {
+            if(physics.isColliding(checkpoint.getComponent(Physics)))
+            {
+                this.startPoint.x = checkpoint.x;
+                this.startPoint.y = checkpoint.y;
+                
+            }
         }
         
         const collectibles = this.game.gameObjects.filter
@@ -74,11 +112,29 @@ class Player extends GameObject
                 this.collectStar(coll);
             }
         }
+        if(this.y > this.game.canvas.height)
+        {
+            this.x = this.startPoint.x;
+            this.y = this.startPoint.y;
+        }
+        
         
         super.update(deltaTime);
-                
+        
+        
     }
-    
+    collidedWithEnemy()
+    {
+        if(!this.inVulnreable)
+        {
+            this.lives --;
+            console.log(this.lives);
+          //  this.x = this.startPoint.x;
+          //  this.y = this.startPoint.y;
+            this.inVulnreable = true;
+            setTimeout(()=>{this.inVulnreable = false;}, 2000);
+        }
+    }
     collectStar(collectible)
     {
         this.game.removeGameObject(collectible);
@@ -96,6 +152,26 @@ class Player extends GameObject
         'yellow', 20, 1, 0.5);
     this.game.addGameObject(particleSystem);
 
+    }
+    
+    startJump()
+    {
+        if(this.isOnPlatform)
+        {
+            this.isJumping = true;
+            this.jumpTimer = this.jumpTime;
+            this.getComponent(Physics).velocity.y = -this.jumpForce;
+            this.isOnPlatform = false;
+        }
+    }
+    
+    updateJump(deltaTime)
+    {
+        this.jumpTimer -= deltaTime;
+        if(this.jumpTimer <=0 || this.getComponent(Physics).velocity.y > 0)
+        {
+            this.isJumping = false;
+        }
     }
 }
 
