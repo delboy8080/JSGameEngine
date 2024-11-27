@@ -5,13 +5,16 @@ import Player from './player.js';
 import Collectible from './collectible.js';
 import Checkpoint from './checkpoint.js';
 import Enemy from './enemy.js';
+import PlayerUI from './PlayerUI.js';
+import HealthBar from './healthBar.js'
 class Level extends Game
 {
     constructor(canvasId)
     {
         super(canvasId);
+        let healthBar = new HealthBar(10, 10, 140, 10);
         
-        const player = new Player(10, this.canvas.height - 150,40, 50);
+        const player = new Player(10, this.canvas.height - 150,40, 50, healthBar);
         
         this.camera.confiner = new Confiner(0,0,2000,this.canvas.height);
         this.camera.target = player;
@@ -49,7 +52,11 @@ class Level extends Game
         {
             this.addGameObject(enemy);
         }
+        let ui = new PlayerUI(10,10);
         
+     
+        this.addGameObject(ui);
+        ui.ui.addGameObject(healthBar);
         this.addGameObject(new Checkpoint(450, this.canvas.height-100, 20,40, 'yellow'));
     }
 }
