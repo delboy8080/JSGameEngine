@@ -1,5 +1,8 @@
 import GameObject from '../engine/gameobject.js'
+import Animation from '../engine/Animation.js'
 import Renderer from '../engine/renderer.js'
+import Animator from '../engine/Animator.js'
+//import Renderer from '../engine/renderer.js'
 import Physics from '../engine/physics.js'
 import Input from "../engine/input.js"
 import {Images} from '../engine/resources.js'
@@ -9,16 +12,24 @@ import Checkpoint from './checkpoint.js'
 import Projectile from './projectile.js'
 import HealthBar from './healthBar.js'
 import ParticleSystem from '../engine/particleSystem.js'
+
+import {RunImages} from '../engine/resources.js'
 class Player extends GameObject
 {
     constructor(x, y, w, h, healthBar)
     {
         super(x, y);
-        this.addComponent(new Renderer('red', w, h, Images.player));
+       // this.addComponent(new Renderer('red', w, h, Images.player));
         this.addComponent(new Physics({x:0, y:0}, {x:0, y:0}) );
         this.addComponent(new Input());
+        this.animator = new Animator('red',w,h);
+        this.addComponent(this.animator);
+        let run = new Animation('red',w,h, RunImages, 10);
+        let idle = new Animation('red', w, h, [RunImages[0]], 10);
         
-        
+        this.animator.addAnimation("run", run);
+        this.animator.addAnimation("idle", idle);
+        this.animator.setAnimation("idle");
         this.tag = "player";
         this.isOnPlatform = false;
         this.direction = 1;
@@ -52,15 +63,18 @@ class Player extends GameObject
             physics.velocity.x = this.speed;
             this.direction = -1;
             console.log("in");
+            this.animator.setAnimation("run");
         }
         else if(input.isKeyDown("ArrowLeft"))
         {
             physics.velocity.x = -this.speed;
             this.direction = 1;
+            this.animator.setAnimation("run");
         }
         else
         {
             physics.velocity.x = 0;
+            this.animator.setAnimation("idle");
         }
         
         if(input.isKeyDown("Space"))
