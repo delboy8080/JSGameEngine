@@ -6,7 +6,7 @@ import {Images} from '../engine/resources.js';
 
 import Player from './player.js';
 import Platform from './platform.js';
-
+import HealthBar from './healthBar.js';
 
 class Enemy extends GameObject
 {
@@ -18,8 +18,15 @@ class Enemy extends GameObject
         this.movementDistance = 0;
         this.movementLimit = 100;
         this.moveRight = true;
+        this.healthBar = null;
+        this.lives = 3;
     }
-    
+    setHealthBar(hb)
+    {
+        this.healthBar = hb;
+        this.healthBar.maxValue = this.lives;
+        this.healthBar.currentValue = this.lives;
+    }
     update(deltaTime)
     {
          let physics = this.getComponent(Physics);
@@ -78,11 +85,20 @@ class Enemy extends GameObject
             player.collidedWithEnemy();
         }
         super.update(deltaTime);
+        this.healthBar.x = this.x;
+        this.healthBar.y = this.y-15;
+        
     }
     
     hit()
     {
-        this.game.removeGameObject(this);
+        this.lives--;
+        this.healthBar.currentValue = this.lives;
+        if(this.lives === 0)
+        {
+             this.game.removeGameObject(this.healthBar);
+            this.game.removeGameObject(this);
+        }
     }
 }
 

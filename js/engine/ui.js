@@ -39,12 +39,9 @@ class UI extends Component {
     
     for(let obj of this.gameObjects)
     {
-        let xDiff = camera.x - obj.x;
-        let yDiff = camera.y - obj.y;
         ctx.save();
-        ctx.translate(xDiff, yDiff);
+        ctx.translate(camera.x, camera.y);
         obj.draw(ctx);
-         ctx.translate(-xDiff, -yDiff);
         ctx.restore();
     }
     

@@ -1,4 +1,5 @@
 import Game from '../engine/game.js';
+import Renderer from '../engine/renderer.js';
 import Confiner from '../engine/confiner.js';
 import Platform from './platform.js';
 import Player from './player.js';
@@ -12,7 +13,7 @@ class Level extends Game
     constructor(canvasId)
     {
         super(canvasId);
-        let healthBar = new HealthBar(10, 10, 140, 10);
+        let healthBar = new HealthBar(this.canvas.width-150, 10, 140, 10);
         
         const player = new Player(10, this.canvas.height - 150,40, 50, healthBar);
         
@@ -50,6 +51,10 @@ class Level extends Game
         
         for(let enemy of enemies)
         {
+            console.log(enemy);
+            let hb = new HealthBar(enemy.x, enemy.y-15,enemy.getComponent(Renderer).width, 10 );
+            enemy.setHealthBar(hb);
+            this.addGameObject(hb);
             this.addGameObject(enemy);
         }
         let ui = new PlayerUI(10,10);
