@@ -31,7 +31,7 @@ class Player extends GameObject
         this.jumpTimer = 0;
         this.lives = 3;
         this.inVulnreable =false;
-        
+        this.canFire = true;
         this.startPoint = {x: x, y:y};
 
     }
@@ -61,11 +61,17 @@ class Player extends GameObject
         
         if(input.isKeyDown("Space"))
         {
-            let projectile = new Projectile(this.x + (renderer.width/2) , 
-            this.y + renderer.height/2, 20,20,Images.projectile1, "PlayerProjectile",
-            this.direction*-1);
-            this.game.addGameObject(projectile);
-            input.keys["Space"]=false;
+            if(this.canFire)
+            {
+                let projectile = new Projectile(this.x + (renderer.width/2) , 
+                this.y + renderer.height/2, 20,20,Images.projectile1, "PlayerProjectile",
+                this.direction*-1);
+                this.game.addGameObject(projectile);
+                input.keys["Space"]=false;
+                this.canFire = false;
+                
+                setTimeout(()=>{this.canFire = true;}, 500);
+            }
         }
         if(input.isKeyDown("ArrowUp") && this.isOnPlatform)
         {
