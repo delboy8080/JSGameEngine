@@ -7,10 +7,11 @@ import Platform from './platform.js'
 import Collectible from './collectible.js'
 import Checkpoint from './checkpoint.js'
 import Projectile from './projectile.js'
+import HealthBar from './healthBar.js'
 import ParticleSystem from '../engine/particleSystem.js'
 class Player extends GameObject
 {
-    constructor(x, y, w, h)
+    constructor(x, y, w, h, healthBar)
     {
         super(x, y);
         this.addComponent(new Renderer('red', w, h, Images.player));
@@ -33,7 +34,10 @@ class Player extends GameObject
         this.inVulnreable =false;
         this.canFire = true;
         this.startPoint = {x: x, y:y};
-
+        this.healthBar = healthBar;
+        this.healthBar.maxValue = this.lives;
+        this.healthBar.currentValue = this.lives;
+        
     }
     
     update(deltaTime)
@@ -134,6 +138,7 @@ class Player extends GameObject
         if(!this.inVulnreable)
         {
             this.lives --;
+            this.healthBar.currentValue = this.lives;
             console.log(this.lives);
           //  this.x = this.startPoint.x;
           //  this.y = this.startPoint.y;

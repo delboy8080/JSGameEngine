@@ -13,7 +13,7 @@ class Projectile extends GameObject
     {
         super(x,y);
         this.addComponent(new Renderer('white', w, h, img));
-        this.addComponent(new Physics({x:100*dir, y:0}, {x:100, y:0}, {x:0,y:0}));
+        this.addComponent(new Physics({x:100*dir, y:0}, {x:100*dir, y:0}, {x:0,y:0}));
         this.tag = tag;
     }
     
