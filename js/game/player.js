@@ -5,7 +5,7 @@ import Animator from '../engine/Animator.js'
 //import Renderer from '../engine/renderer.js'
 import Physics from '../engine/physics.js'
 import Input from "../engine/input.js"
-import {Images} from '../engine/resources.js'
+import {Images, AudioFiles} from '../engine/resources.js'
 import Platform from './platform.js'
 import Collectible from './collectible.js'
 import Checkpoint from './checkpoint.js'
@@ -24,8 +24,8 @@ class Player extends GameObject
         this.addComponent(new Input());
         this.animator = new Animator('red',w,h);
         this.addComponent(this.animator);
-        let run = new Animation('red',w,h, RunImages, 10);
-        let idle = new Animation('red', w, h, [RunImages[0]], 10);
+        let run = new Animation('red',w,h, this.getImages("./resources/images/player/Run", "Run", 11), 10);
+        let idle = new Animation('red', w, h, this.getImages("./resources/images/player/Idle", "Idle", 16), 10);
         
         this.animator.addAnimation("run", run);
         this.animator.addAnimation("idle", idle);
@@ -64,19 +64,26 @@ class Player extends GameObject
             this.direction = -1;
             console.log("in");
             this.animator.setAnimation("run");
+            AudioFiles.walk.play();
         }
         else if(input.isKeyDown("ArrowLeft"))
         {
             physics.velocity.x = -this.speed;
             this.direction = 1;
             this.animator.setAnimation("run");
+            AudioFiles.walk.play();
         }
         else
         {
             physics.velocity.x = 0;
             this.animator.setAnimation("idle");
+            AudioFiles.walk.pause();
         }
         
+        if(input.isKeyDown("KeyP"))
+        {
+            this.game.setPause();
+        }
         if(input.isKeyDown("Space"))
         {
             if(this.canFire)
@@ -197,6 +204,18 @@ class Player extends GameObject
         {
             this.isJumping = false;
         }
+    }
+    
+    getImages(path, baseName, numImages)
+    {
+        let images = [];
+        for(let i = 1; i <= numImages;i++)
+        {
+            let img = new Image();
+            img.src = path + "/"+baseName+" ("+i+").png";
+            images.push(img);
+        }
+        return images;
     }
 }
 

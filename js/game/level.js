@@ -15,7 +15,7 @@ class Level extends Game
         super(canvasId);
         let healthBar = new HealthBar(this.canvas.width-150, 10, 140, 10);
         
-        const player = new Player(10, this.canvas.height - 100,50, 50, healthBar);
+        const player = new Player(10, this.canvas.height - 100,75, 75, healthBar);
         
         this.camera.confiner = new Confiner(0,0,2000,this.canvas.height);
         this.camera.target = player;

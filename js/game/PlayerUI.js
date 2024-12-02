@@ -16,7 +16,7 @@ class PlayerUI extends GameObject
     {
        let playerHealth = new GraphicalUI(x, y);
        this.addComponent(playerHealth);
-       this.playerHealth.addGameObject(gameObject);
+       playerHealth.addGameObject(gameObject);
     }
     update(deltaTime)
     {

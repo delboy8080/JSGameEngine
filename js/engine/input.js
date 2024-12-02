@@ -15,7 +15,7 @@ class Input extends Component {
     // Add event listeners for the keydown and keyup events.
     // When a keydown event is fired, the corresponding key in the keys object is set to true.
     // When a keyup event is fired, the corresponding key in the keys object is set to false.
-    document.addEventListener('keydown', (event) => (this.keys[event.code] = true));
+    document.addEventListener('keydown', (event) => {this.keys[event.code] = true;  console.log(event.code);});
     document.addEventListener('keyup', (event) => (this.keys[event.code] = false));
 
     // Add event listeners for the gamepadconnected and gamepaddisconnected events.
@@ -33,6 +33,7 @@ class Input extends Component {
 
   // This method checks if a particular key is down.
   isKeyDown(key) {
+     
     // If the key is in the keys object and its value is true, return true. Otherwise, return false.
     return this.keys[key] || false;
   }
