@@ -61,7 +61,7 @@ class Level extends Game
         
      
         this.addGameObject(ui);
-        ui.ui.addGameObject(healthBar);
+        ui.addGameObject(healthBar, this.canvas.width-200, 10);
         this.addGameObject(new Checkpoint(450, this.canvas.height-100, 20,40, 'yellow'));
     }
 }
