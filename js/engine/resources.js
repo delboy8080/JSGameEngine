@@ -4,6 +4,7 @@ const Images = {
   enemy: new Image(),
   collectible: new Image(),// The Image instance for the enemy.
   projectile1: new Image(),
+  Tile: new Image(0,)
 };
 
 const RunImages = 
@@ -31,7 +32,7 @@ RunImages[0].src = "./resources/images/player/Run1.png";
 RunImages[1].src = "./resources/images/player/Run2.png";
 RunImages[2].src = "./resources/images/player/Run3.png";
 RunImages[3].src = "./resources/images/player/Run4.png";
-
+Images.Tile.src = "./resources/images/GrassMid.png";
 
 // Export the Images and AudioFiles objects so they can be imported and used in other modules.
 export { Images, AudioFiles, RunImages };

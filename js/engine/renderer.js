@@ -21,6 +21,7 @@ class Renderer extends Component {
       const y = this.gameObject.y;
       const w = this.width;
       const h = this.height;
+       console.log(this.image.width );
       // Check if the image should be flipped horizontally based on the direction of the game object.
       const flipX = this.gameObject.direction === -1;
       if (!flipX) {

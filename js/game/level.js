@@ -8,6 +8,8 @@ import Checkpoint from './checkpoint.js';
 import Enemy from './enemy.js';
 import PlayerUI from './PlayerUI.js';
 import HealthBar from './healthBar.js'
+import {Images} from '../engine/resources.js'
+        
 class Level extends Game
 {
     constructor(canvasId)
@@ -22,9 +24,9 @@ class Level extends Game
         this.addGameObject(player);
         
         const platforms = [
-                    new Platform(0, this.canvas.height-40, 200, 20),
-                    new Platform(300, this.canvas.height-40, 200, 20),
-                    new Platform(600, this.canvas.height-80, 200, 60)
+                    new Platform(0, this.canvas.height-40, 200, 20, Images.Tile),
+                    new Platform(300, this.canvas.height-40, 200, 20, Images.Tile),
+                    new Platform(600, this.canvas.height-80, 200, 60, Images.Tile)
         ];
         
         for(const platform of platforms)
